@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<HTML>
+	<head>
+		<title>focus trap
+		</title>
+		<link rel="styleSheet" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<header>
+				<h1>Modal example</h1>
+			</header>
+
+		<main>
+		<div class="container1">
+			<p>Here I am adding text</p>
+			<ul>
+						<li><a href="#">Menu1</a></li>
+						<li><a href="#">Menu2</a></li>
+						<li><a href="#">Menu3</a></li>
+			</ul>
+		</div>
+		<div class="container3">
+		<button id="btn">Open the dialog</button>
+		<button id="btn2"> Another button</button>
+		<button> Third button </button>
+		</div>
+
+		<div id="modal-container" aria-hidden="true" aria-labelledby="h11">
+			<div id="modal">
+				<div class="header">
+					<span id="close" tabindex=0>&times;</span>
+					<h1 style="margin:0;float:left;" id="h11" tabindex=0>Header</h1>
+				</div>
+				<div class="clear"></div>
+				<div class="body">
+					<a href="#" id="trap">Hello</a>
+					<a href="#" id="trap2">Hello1</a>
+
+					<p>Hello again for modal</p>
+				</div>
+				<div class="footer">
+					<p>&copy2014;</p>
+				</div>
+			</div>
+		</div>
+	</div>
+		</main>
+		<script>
+			var btn= document.getElementById('btn');
+			var modal = document.getElementById('modal-container');
+			var close=document.getElementById('close');
+			// Clicking outside the modal
+			window.addEventListener('click',function(e){
+					if(e.target == close){
+					modal.style.display ="none"
+				}
+			});
+			
+		
+			// opening the modal
+			btn.addEventListener('click',function(e){
+				//console.log("hello modal");
+				modal.style.display ="block";
+				//adding the attribute for focus and accessibility
+				$('#modal-container').attr("aria-hidden","false");
+				//setting the focus =-1 to main div
+				$('div.container').attr("tabindex","-1");
+				//setting the focus to first element
+				$('#close').focus();
+				//getting the keydown option, reverse tabbing
+				$('#close').keydown(function(e){
+					if(e.shiftKey && e.which ==9){
+						//console.log(e.shiftKey, e.which);
+						$('#trap2').focus();
+						e.preventDefault();
+					}
+				//global closing using esc, when inside the tab
+				$(document).keydown(function(e){
+					if(e.which ==27){
+						close1();
+					}
+				});
+				});
+				/*
+				$('#trap2').keydown(function(e){
+				//console.log(e.which);
+				//console.log(e.keyCode)
+				var code = e.keyCode || e.which;
+				if(code == 9){
+					$('#close').focus();
+					e.preventDefault();
+				}
+			});
+*/				//console.log(e.which);
+			});
+
+			//close modal with key
+			$('#close').keydown(function(e){
+				if(e.which ==13){
+					close1();
+					e.preventDefault();
+				}
+			})
+			// close modal with click 
+			$('#close').click(function(){
+				close1();
+			});
+			// close function, which can be used globally
+			function close1(){
+				modal.style.display ="none";
+				$('div.container').attr("tabindex","0");
+				$('#modal-container').attr("aria-hidden","true");
+				$('#btn').focus();
+			}
+
+
+			
+			/*
+			$('#trap').keyup(function(e){
+				//console.log(e.which);
+				//console.log(e.keyCode)
+				var code = e.keyCode || e.which;
+				if(code == 16){
+					$('#close').focus();
+				}
+			});
+				$('#close').keyup(function(e){
+				var code= e.which || e.keyCode;
+				if(code == 16){
+					$('#trap').focus();
+				}
+			});
+		
+			window.addEventListener('keyup',function(e){
+				//console.log(e.which);
+			});
+	*/
+		</script>
+	</body>
+</html>
