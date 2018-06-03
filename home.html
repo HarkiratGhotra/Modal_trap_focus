@@ -31,7 +31,7 @@
 		<div id="modal-container" aria-hidden="true" aria-labelledby="h11">
 			<div id="modal">
 				<div class="header">
-					<span id="close" tabindex=0>&times;</span>
+					<span id="close" tabindex=0 aria-label="close button">&times;</span>
 					<h1 style="margin:0;float:left;" id="h11" tabindex=0>Header</h1>
 				</div>
 				<div class="clear"></div>
@@ -49,8 +49,42 @@
 	</div>
 		</main>
 		<script>
+			//using jquery
+			//var x =$('#modal-container');
+			//var y = x.find('a, [tabindex]');
+			//console.log(y);
+			//for(var i=0;i<y.length;i++){
+				//console.log(y[i]);
+			//}
+			//console.log($(y));
+			//var firstfocus = y.first()[0];
+			//console.log(firstfocus);
+			//var lastfocus = y.last()[0];
+			//console.log(lastfocus);
+
+			var element1 = $('#modal-container');
+			var element2 = element1.find('a,[tabindex]');
+			console.log(element2);
+			var firstfocus = element2.first()[0];
+			console.log(firstfocus);
+			var lastfocus = element2.last()[0];
+			console.log(lastfocus);
 			var btn= document.getElementById('btn');
 			var modal = document.getElementById('modal-container');
+			//using queryselector
+			/*
+			var x = modal.querySelectorAll("a,[tabindex]");
+			console.log(x);
+			for(var i=0; i<x.length; i++){
+				if(i == 0){
+					var firstfocus = x[i];
+				}
+				if(i == x.length-1){
+					var lastfocus = x[i];
+				}
+			}
+			console.log(firstfocus);
+			console.log(lastfocus);
 			var close=document.getElementById('close');
 			// Clicking outside the modal
 			window.addEventListener('click',function(e){
@@ -58,10 +92,13 @@
 					modal.style.display ="none"
 				}
 			});
+			//var focusableEls = element.find('a, object, :input, iframe, [tabindex]');
+			//console.log(focusableEls);
 			
-		
 			// opening the modal
+			*/
 			btn.addEventListener('click',function(e){
+				//console.log(focusableEls);
 				//console.log("hello modal");
 				modal.style.display ="block";
 				//adding the attribute for focus and accessibility
@@ -71,19 +108,43 @@
 				//setting the focus to first element
 				$('#close').focus();
 				//getting the keydown option, reverse tabbing
+				/*
 				$('#close').keydown(function(e){
 					if(e.shiftKey && e.which ==9){
 						//console.log(e.shiftKey, e.which);
 						$('#trap2').focus();
 						e.preventDefault();
 					}
+				*/
+				//$(x).keydown(function(e){
+					$(element2).keydown(function(e){
+					console.log(e.which);
+					if(e.keyCode || e.which == 9){
+						//console.log(e.keyCode);
+						if(e.shiftKey && e.which == 9){
+							console.log("hello");
+							if(document.activeElement == firstfocus){
+							console.log("first");
+							lastfocus.focus();
+							e.preventDefault();
+							}
+						}
+							else{
+								if(document.activeElement == lastfocus){
+									firstfocus.focus();
+									e.preventDefault();
+								}
+							}
+						}
+					
+				});
 				//global closing using esc, when inside the tab
 				$(document).keydown(function(e){
 					if(e.which ==27){
 						close1();
 					}
 				});
-				});
+				
 				/*
 				$('#trap2').keydown(function(e){
 				//console.log(e.which);
@@ -96,7 +157,15 @@
 			});
 */				//console.log(e.which);
 			});
-
+			/*
+			$('#trap2').keydown(function(e){
+					if(e.which == 9){
+						console.log(e.which);
+						$('close').focus();
+						e.preventDefault();
+					}
+				});
+			*/
 			//close modal with key
 			$('#close').keydown(function(e){
 				if(e.which ==13){
